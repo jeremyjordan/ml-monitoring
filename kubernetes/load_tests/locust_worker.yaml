@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: locust-worker
+  labels:
+    app: locust-worker
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: locust-worker
+  template:
+    metadata:
+      labels:
+        app: locust-worker
+    spec:
+      containers:
+        - name: locust
+          image: ghcr.io/jeremyjordan/locust-load-test:0.1
+          command:
+            - locust
+          args:
+            - -f
+            - locustfile.py
+            - --worker
+            - --master-host=locust-master.default
+          ports:
+            - name: loc-master-web
+              containerPort: 8089
+              protocol: TCP
+            - name: loc-master-p1
+              containerPort: 5557
+              protocol: TCP
+            - name: loc-master-p2
+              containerPort: 5558
+              protocol: TCP
+          resources:
+            requests:
+              memory: 100Mi
+              cpu: 100m
+            limits:
+              memory: 200Mi
+              cpu: 200m
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: locust-worker
+  labels:
+    app: locust-worker
+spec:
+  ports:
+    - port: 8089
+      targetPort: loc-master-web
+      protocol: TCP
+      name: loc-master-web
+    - port: 5557
+      targetPort: loc-master-p1
+      protocol: TCP
+      name: loc-master-p1
+    - port: 5558
+      targetPort: loc-master-p2
+      protocol: TCP
+      name: loc-master-p2
+  selector:
+    app: locust-worker
+  type: ClusterIP

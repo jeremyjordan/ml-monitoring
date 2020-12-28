@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wine-quality-model
+  labels:
+    app: wine-quality-model
+spec:
+  selector:
+    matchLabels:
+      app: wine-quality-model
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: wine-quality-model
+    spec:
+      containers:
+        - name: fastapi-wine-quality-model
+          image: "ghcr.io/jeremyjordan/wine-quality-model:0.2"
+          imagePullPolicy: Always
+          env:
+            - name: ENABLE_METRICS
+              value: "true"
+          ports:
+            - name: app
+              containerPort: 80
+          resources:
+            requests:
+              memory: 0.5Gi
+              cpu: "0.25"
+            limits:
+              memory: 1Gi
+              cpu: "0.5"
+          livenessProbe:
+            httpGet:
+              path: /healthcheck
+              port: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wine-quality-model-service
+  labels:
+    app: wine-quality-model
+spec:
+  selector:
+    app: wine-quality-model
+  ports:
+    - name: app
+      port: 80
+  type: ClusterIP
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: wine-quality-model-servicemonitor
+  # must by the same namespace that Prometheus is running in
+  namespace: monitoring
+  labels:
+    app: wine-quality-model
+    release: prometheus-stack
+spec:
+  selector:
+    matchLabels:
+      app: wine-quality-model
+  endpoints:
+    - path: metrics
+      port: app
+      interval: 15s
+  namespaceSelector:
+    any: true
