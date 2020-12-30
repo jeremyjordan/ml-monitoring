@@ -90,12 +90,12 @@ docker tag wine-quality-model:0.3 ghcr.io/jeremyjordan/wine-quality-model:0.3
 ```
 
 ```
-docker build -t locust-load-test:0.1 -f load_test/Dockerfile .
-docker tag locust-load-test:0.1 ghcr.io/jeremyjordan/locust-load-test:0.1
+docker build -t locust-load-test:0.2 -f load_test/Dockerfile .
+docker tag locust-load-test:0.2 ghcr.io/jeremyjordan/locust-load-test:0.2
 ```
 4. Push Docker images to container registery.
 ```
 docker push ghcr.io/jeremyjordan/wine-quality-model:0.3
-docker push ghcr.io/jeremyjordan/locust-load-test:0.1
+docker push ghcr.io/jeremyjordan/locust-load-test:0.2
 ```
 5. Update Kubernetes manifests to use the new image tag.

@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: locust
-          image: ghcr.io/jeremyjordan/locust-load-test:0.1
+          image: ghcr.io/jeremyjordan/locust-load-test:0.2
           command:
             - locust
           args:
