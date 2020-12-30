@@ -26,7 +26,7 @@ spec:
             - name: METRICS_NAMESPACE
               value: "fastapi"
             - name: METRICS_SUBSYSTEM
-              value: "wine_quality_model"
+              value: ""
           ports:
             - name: app
               containerPort: 80

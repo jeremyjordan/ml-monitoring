@@ -1,6 +1,7 @@
 import os
 from typing import Callable
 
+import numpy as np
 from prometheus_client import Histogram
 from prometheus_fastapi_instrumentator import Instrumentator, metrics
 from prometheus_fastapi_instrumentator.metrics import Info
@@ -15,7 +16,7 @@ instrumentator = Instrumentator(
     should_instrument_requests_inprogress=True,
     excluded_handlers=["/metrics"],
     env_var_name="ENABLE_METRICS",
-    inprogress_name="inprogress",
+    inprogress_name="fastapi_inprogress",
     inprogress_labels=True,
 )
 
@@ -26,11 +27,12 @@ def regression_model_output(
     metric_doc: str = "Output value of regression model",
     metric_namespace: str = "",
     metric_subsystem: str = "",
+    buckets=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, float("inf")),
 ) -> Callable[[Info], None]:
     METRIC = Histogram(
         metric_name,
         metric_doc,
-        buckets=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, float("inf")),
+        buckets=buckets,
         namespace=metric_namespace,
         subsystem=metric_subsystem,
     )
@@ -81,4 +83,8 @@ instrumentator.add(
         metric_subsystem=SUBSYSTEM,
     )
 )
-instrumentator.add(regression_model_output(metric_namespace=NAMESPACE, metric_subsystem=SUBSYSTEM,))
+
+buckets = (*np.arange(0, 10.5, 0.5).tolist(), float("inf"))
+instrumentator.add(
+    regression_model_output(metric_namespace=NAMESPACE, metric_subsystem=SUBSYSTEM, buckets=buckets)
+)
