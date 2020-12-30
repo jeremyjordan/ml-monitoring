@@ -10,6 +10,8 @@ Components:
 - Monitor and store metrics via `Prometheus`
 - Visualize metrics via `Grafana`
 
+![](.assets/dashboard.png)
+
 ## Setup
 
 1. Ensure you can connect to a Kubernetes cluster and have [`kubectl`](https://kubernetes.io/docs/tasks/tools/install-kubectl/) and [`helm`](https://helm.sh/docs/intro/install/) installed.
@@ -17,6 +19,7 @@ Components:
 ```
 minikube start --driver=docker --memory 4g --nodes 2
 ```
+
 2. Deploy Prometheus and Grafana onto the cluster using the [community Helm chart](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack).
 ```
 kubectl create namespace monitoring
@@ -35,6 +38,9 @@ kubectl port-forward svc/prometheus-stack-grafana 8000:80 -n monitoring
     - Username: admin
     - Password: prom-operator
     - (This password can be configured in the Helm chart `values.yaml` file)
+5. Import the model dashboard.
+    - On the left sidebar, click the "+" and select "Import".
+    - Copy and paste the JSON defined in `dashboards/model.json` in the text area.
 
 ## Deploy a model
 
@@ -99,3 +105,20 @@ docker push ghcr.io/jeremyjordan/wine-quality-model:0.3
 docker push ghcr.io/jeremyjordan/locust-load-test:0.2
 ```
 5. Update Kubernetes manifests to use the new image tag.
+
+## Teardown instructions
+
+To stop the model REST server, run:
+```
+kubectl delete -f kubernetes/models/
+```
+
+To stop the load tests, run:
+```
+kubectl delete -f kubernetes/load_tests/
+```
+
+To remove the Prometheus stack, run:
+```
+helm uninstall prometheus-stack -n monitoring
+```
