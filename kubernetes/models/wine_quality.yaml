@@ -18,11 +18,15 @@ spec:
     spec:
       containers:
         - name: fastapi-wine-quality-model
-          image: "ghcr.io/jeremyjordan/wine-quality-model:0.2"
+          image: ghcr.io/jeremyjordan/wine-quality-model:0.3
           imagePullPolicy: Always
           env:
             - name: ENABLE_METRICS
               value: "true"
+            - name: METRICS_NAMESPACE
+              value: "fastapi"
+            - name: METRICS_SUBSYSTEM
+              value: "wine_quality_model"
           ports:
             - name: app
               containerPort: 80

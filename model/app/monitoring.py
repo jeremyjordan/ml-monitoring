@@ -1,8 +1,12 @@
+import os
 from typing import Callable
 
 from prometheus_client import Histogram
 from prometheus_fastapi_instrumentator import Instrumentator, metrics
 from prometheus_fastapi_instrumentator.metrics import Info
+
+NAMESPACE = os.environ.get("METRICS_NAMESPACE", "fastapi")
+SUBSYSTEM = os.environ.get("METRICS_SUBSYSTEM", "model")
 
 instrumentator = Instrumentator(
     should_group_status_codes=True,
@@ -17,11 +21,18 @@ instrumentator = Instrumentator(
 
 
 # ----- custom metrics -----
-def regression_model_output() -> Callable[[Info], None]:
+def regression_model_output(
+    metric_name: str = "regression_model_output",
+    metric_doc: str = "Output value of regression model",
+    metric_namespace: str = "",
+    metric_subsystem: str = "",
+) -> Callable[[Info], None]:
     METRIC = Histogram(
-        "regression_model_output",
-        "Output value of wine quality regression model.",
-        buckets=(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, float("inf")),
+        metric_name,
+        metric_doc,
+        buckets=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, float("inf")),
+        namespace=metric_namespace,
+        subsystem=metric_subsystem,
     )
 
     def instrumentation(info: Info) -> None:
@@ -39,8 +50,8 @@ instrumentator.add(
         should_include_handler=True,
         should_include_method=False,
         should_include_status=True,
-        metric_namespace="fastapi",
-        metric_subsystem="",
+        metric_namespace=NAMESPACE,
+        metric_subsystem=SUBSYSTEM,
     )
 )
 instrumentator.add(
@@ -48,8 +59,8 @@ instrumentator.add(
         should_include_handler=True,
         should_include_method=False,
         should_include_status=True,
-        metric_namespace="fastapi",
-        metric_subsystem="",
+        metric_namespace=NAMESPACE,
+        metric_subsystem=SUBSYSTEM,
     )
 )
 instrumentator.add(
@@ -57,8 +68,8 @@ instrumentator.add(
         should_include_handler=True,
         should_include_method=False,
         should_include_status=True,
-        metric_namespace="fastapi",
-        metric_subsystem="",
+        metric_namespace=NAMESPACE,
+        metric_subsystem=SUBSYSTEM,
     )
 )
 instrumentator.add(
@@ -66,8 +77,8 @@ instrumentator.add(
         should_include_handler=True,
         should_include_method=False,
         should_include_status=True,
-        metric_namespace="fastapi",
-        metric_subsystem="",
+        metric_namespace=NAMESPACE,
+        metric_subsystem=SUBSYSTEM,
     )
 )
-instrumentator.add(regression_model_output())
+instrumentator.add(regression_model_output(metric_namespace=NAMESPACE, metric_subsystem=SUBSYSTEM,))
