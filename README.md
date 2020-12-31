@@ -44,7 +44,9 @@ kubectl port-forward svc/prometheus-stack-grafana 8000:80 -n monitoring
 
 ## Deploy a model
 
-This repository includes an example ML server defined in `model/`. You can launch the server on Kubernetes by running:
+This repository includes an example REST service which exposes an ML model trained on the [UCI Wine Quality dataset](https://archive.ics.uci.edu/ml/datasets/wine+quality). 
+
+You can launch the service on Kubernetes by running:
 
 ```
 kubectl apply -f kubernetes/models/
@@ -57,7 +59,7 @@ docker build -t wine-quality-model -f model/Dockerfile .
 docker run -d -p 3000:80 -e ENABLE_METRICS=true wine-quality-model
 ```
 
-> Note: In order for Prometheus to scrape metrics from this service, we need to define a `ServiceMonitor` resource. This resource must have the label `release: prometheus-stack` in order to be discovered. This is configured in the `Prometheus` resource spec via the `serviceMonitorSelector` attribute. 
+> **Note:** In order for Prometheus to scrape metrics from this service, we need to define a `ServiceMonitor` resource. This resource must have the label `release: prometheus-stack` in order to be discovered. This is configured in the `Prometheus` resource spec via the `serviceMonitorSelector` attribute. 
 
 You can verify the label required by running:
 ```

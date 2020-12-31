@@ -245,7 +245,7 @@
             },
             "id": 12,
             "options": {
-                "content": "# Request Throughput\n\n4xx status codes are common when clients\nPOST data that does not meet the expected\nschema.",
+                "content": "# Request Throughput\n\n2xx status codes denote a successful model\nprediction.\n\n4xx status codes are common when clients\nPOST data that does not meet the expected\nschema.\n\nWe calculate the success rate as the percentage\nof HTTP requests that do not return a 5xx code.",
                 "mode": "markdown"
             },
             "pluginVersion": "7.1.0",
@@ -610,13 +610,193 @@
             }
         },
         {
+            "datasource": null,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 9,
+                "w": 5,
+                "x": 0,
+                "y": 29
+            },
+            "id": 29,
+            "options": {
+                "content": "# Request Size\n\nThis visualizes the request body sizes for\nthe model predict route. We expect the request\nbody to contain a dictionary with 11 keys with \nall values being floats.         ",
+                "mode": "markdown"
+            },
+            "pluginVersion": "7.1.0",
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "",
+            "type": "text"
+        },
+        {
+            "datasource": null,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {},
+                    "mappings": [],
+                    "noValue": "No Data",
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "#EAB839",
+                                "value": 500
+                            }
+                        ]
+                    },
+                    "unit": "decbytes"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 9,
+                "w": 4,
+                "x": 5,
+                "y": 29
+            },
+            "id": 31,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": [
+                        "mean"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "textMode": "auto"
+            },
+            "pluginVersion": "7.2.1",
+            "targets": [
+                {
+                    "expr": "sum(rate(fastapi_http_request_size_bytes_sum{handler=\"/predict\"}[30m])) / sum(rate(fastapi_http_request_size_bytes_count{handler=\"/predict\"}[30m]))",
+                    "interval": "",
+                    "legendFormat": "",
+                    "refId": "A"
+                }
+            ],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Request Size (30m avg)",
+            "type": "stat"
+        },
+        {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {},
+                    "unit": "decbytes"
+                },
+                "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+                "h": 9,
+                "w": 15,
+                "x": 9,
+                "y": 29
+            },
+            "hiddenSeries": false,
+            "id": 30,
+            "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+                "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "7.2.1",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+                {
+                    "expr": "sum(rate(fastapi_http_request_size_bytes_sum{handler=\"/predict\"}[1m])) / sum(rate(fastapi_http_request_size_bytes_count{handler=\"/predict\"}[1m]))",
+                    "interval": "",
+                    "legendFormat": "",
+                    "refId": "A"
+                }
+            ],
+            "thresholds": [],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Request Size",
+            "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "format": "decbytes",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": "0",
+                    "show": true
+                },
+                {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }
+            ],
+            "yaxis": {
+                "align": false,
+                "alignLevel": null
+            }
+        },
+        {
             "collapsed": false,
             "datasource": null,
             "gridPos": {
                 "h": 1,
                 "w": 24,
                 "x": 0,
-                "y": 29
+                "y": 38
             },
             "id": 25,
             "panels": [],
