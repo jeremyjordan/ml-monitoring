@@ -1,3 +1,9 @@
+"""
+More information on the features used to describe wine:
+http://repositorium.sdum.uminho.pt/bitstream/1822/10029/1/wine5.pdf
+"""
+
+
 from pydantic import BaseModel, Field
 
 
