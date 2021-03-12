@@ -3,6 +3,7 @@
 .DS_Store
 *.ipynb
 .ipynb_checkpoints
+secrets.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
