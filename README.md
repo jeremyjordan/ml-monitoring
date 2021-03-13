@@ -57,8 +57,8 @@ kubectl apply -f kubernetes/models/
 You can also build and run the Docker container locally.
 
 ```
-docker build -t wine-quality-model -f model/Dockerfile .
-docker run -d -p 3000:80 -e ENABLE_METRICS=true wine-quality-model
+docker build -t wine-quality-model -f Dockerfile .
+docker run -d -p 3000:80 -e FIDDLER_URL=<INSERT> -e FIDDLER_ORG_ID=<INSERT> -e FIDDLER_AUTH_TOKEN=<INSERT> wine-quality-model
 ```
 
 > **Note:** In order for Prometheus to scrape metrics from this service, we need to define a `ServiceMonitor` resource. This resource must have the label `release: prometheus-stack` in order to be discovered. This is configured in the `Prometheus` resource spec via the `serviceMonitorSelector` attribute. 
@@ -95,7 +95,7 @@ cat ~/.github/cr_token | docker login ghcr.io -u jeremyjordan --password-stdin
 ```
 3. Build and tag new Docker images.
 ```
-docker build -t wine-quality-model:0.3 -f model/Dockerfile .
+docker build -t wine-quality-model:0.3 -f Dockerfile .
 docker tag wine-quality-model:0.3 ghcr.io/jeremyjordan/wine-quality-model:0.3
 ```
 

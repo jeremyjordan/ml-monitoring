@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: fastapi-wine-quality-model
-          image: ghcr.io/jeremyjordan/wine-quality-model:0.3
+          image: ghcr.io/jeremyjordan/wine-quality-model:0.3-fiddler
           imagePullPolicy: Always
           env:
             - name: ENABLE_METRICS

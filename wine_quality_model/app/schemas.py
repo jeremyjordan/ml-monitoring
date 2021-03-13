@@ -6,6 +6,20 @@ http://repositorium.sdum.uminho.pt/bitstream/1822/10029/1/wine5.pdf
 
 from pydantic import BaseModel, Field
 
+feature_names = [
+    "fixed_acidity",
+    "volatile_acidity",
+    "citric_acid",
+    "residual_sugar",
+    "chlorides",
+    "free_sulfur_dioxide",
+    "total_sulfur_dioxide",
+    "density",
+    "ph",
+    "sulphates",
+    "alcohol_pct_vol",
+]
+
 
 class Wine(BaseModel):
     fixed_acidity: float = Field(

@@ -6,7 +6,9 @@ https://docs.fiddler.ai/api-reference/package-py/
 from pathlib import Path
 from joblib import load
 
-from .app.api import feature_names
+import pandas as pd
+
+from wine_quality_model.app.schemas import feature_names
 
 ROOT_DIR = Path(__file__).parent
 MODEL_PATH = ROOT_DIR / "artifacts" / "model.joblib"
@@ -24,7 +26,7 @@ class MyModel:
     def predict(self, input_df):
         features_scaled = self.scaler.transform(input_df)
         predictions = self.model.predict(features_scaled)
-        return predictions
+        return pd.DataFrame({"predicted_quality": predictions})
 
 
 def get_model():
