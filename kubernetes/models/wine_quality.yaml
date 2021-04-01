@@ -27,6 +27,22 @@ spec:
               value: "fastapi"
             - name: METRICS_SUBSYSTEM
               value: ""
+            - name: FIDDLER_URL
+              valueFrom:
+                secretKeyRef:
+                  name: fiddler-secrets
+                  key: FIDDLER_URL
+            - name: FIDDLER_ORG_ID
+              valueFrom:
+                secretKeyRef:
+                  name: fiddler-secrets
+                  key: FIDDLER_ORG_ID
+            - name: FIDDLER_AUTH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: fiddler-secrets
+                  key: FIDDLER_AUTH_TOKEN
+
           ports:
             - name: app
               containerPort: 80

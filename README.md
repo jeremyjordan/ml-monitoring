@@ -51,6 +51,11 @@ This repository includes an example REST service which exposes an ML model train
 You can launch the service on Kubernetes by running:
 
 ```
+kubectl create secret generic fiddler-secrets \
+  --from-literal=FIDDLER_URL='<INSERT>' \
+  --from-literal=FIDDLER_ORG_ID='<INSERT>' \
+  --from-literal=FIDDLER_AUTH_TOKEN='<INSERT>'
+
 kubectl apply -f kubernetes/models/
 ```
 
@@ -95,18 +100,20 @@ cat ~/.github/cr_token | docker login ghcr.io -u jeremyjordan --password-stdin
 ```
 3. Build and tag new Docker images.
 ```
-docker build -t wine-quality-model:0.3 -f Dockerfile .
-docker tag wine-quality-model:0.3 ghcr.io/jeremyjordan/wine-quality-model:0.3
+MODEL_TAG=0.3
+docker build -t wine-quality-model:$MODEL_TAG -f Dockerfile .
+docker tag wine-quality-model:$MODEL_TAG ghcr.io/jeremyjordan/wine-quality-model:$MODEL_TAG
 ```
 
 ```
-docker build -t locust-load-test:0.2 -f load_test/Dockerfile .
-docker tag locust-load-test:0.2 ghcr.io/jeremyjordan/locust-load-test:0.2
+LOAD_TAG=0.2
+docker build -t locust-load-test:$LOAD_TAG -f load_test/Dockerfile .
+docker tag locust-load-test:$LOAD_TAG ghcr.io/jeremyjordan/locust-load-test:$LOAD_TAG
 ```
 4. Push Docker images to container registery.
 ```
-docker push ghcr.io/jeremyjordan/wine-quality-model:0.3
-docker push ghcr.io/jeremyjordan/locust-load-test:0.2
+docker push ghcr.io/jeremyjordan/wine-quality-model:$MODEL_TAG
+docker push ghcr.io/jeremyjordan/locust-load-test:$LOAD_TAG
 ```
 5. Update Kubernetes manifests to use the new image tag.
 
