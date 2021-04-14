@@ -62,7 +62,7 @@ kubectl apply -f kubernetes/models/
 You can also build and run the Docker container locally.
 
 ```
-docker build -t wine-quality-model -f Dockerfile .
+docker build -t wine-quality-model -f model/Dockerfile model/
 docker run -d -p 3000:80 -e FIDDLER_URL=<INSERT> -e FIDDLER_ORG_ID=<INSERT> -e FIDDLER_AUTH_TOKEN=<INSERT> wine-quality-model
 ```
 
@@ -101,13 +101,13 @@ cat ~/.github/cr_token | docker login ghcr.io -u jeremyjordan --password-stdin
 3. Build and tag new Docker images.
 ```
 MODEL_TAG=0.3-fiddler
-docker build -t wine-quality-model:$MODEL_TAG -f Dockerfile .
+docker build -t wine-quality-model:$MODEL_TAG -f Dockerfile model/
 docker tag wine-quality-model:$MODEL_TAG ghcr.io/jeremyjordan/wine-quality-model:$MODEL_TAG
 ```
 
 ```
 LOAD_TAG=0.2
-docker build -t locust-load-test:$LOAD_TAG -f load_test/Dockerfile .
+docker build -t locust-load-test:$LOAD_TAG -f load_test/Dockerfile load_test/
 docker tag locust-load-test:$LOAD_TAG ghcr.io/jeremyjordan/locust-load-test:$LOAD_TAG
 ```
 4. Push Docker images to container registery.

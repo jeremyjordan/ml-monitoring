@@ -8,7 +8,7 @@ from joblib import load
 
 import pandas as pd
 
-from wine_quality_model.app.schemas import feature_names
+from model.app.schemas import feature_names
 
 ROOT_DIR = Path(__file__).parent
 MODEL_PATH = ROOT_DIR / "artifacts" / "model.joblib"

@@ -7,7 +7,7 @@ from fastapi import FastAPI, Response, BackgroundTasks
 from joblib import load
 from .schemas import Wine, Rating, feature_names
 from .monitoring import instrumentator
-from wine_quality_model.fiddler.fiddler import client
+from model.fiddler_monitoring import client
 
 
 FIDDLER_PROJECT = os.environ.get("FIDDLER_PROJECT", "jj_wine_quality")
