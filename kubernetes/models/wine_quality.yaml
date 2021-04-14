@@ -27,6 +27,10 @@ spec:
               value: "fastapi"
             - name: METRICS_SUBSYSTEM
               value: ""
+            - name: FIDDLER_PROJECT
+              value: "jj_wine_quality"
+            - name: FIDDLER_MODEL_ID
+              value: "sklearn_model"
             - name: FIDDLER_URL
               valueFrom:
                 secretKeyRef:
@@ -42,7 +46,6 @@ spec:
                 secretKeyRef:
                   name: fiddler-secrets
                   key: FIDDLER_AUTH_TOKEN
-
           ports:
             - name: app
               containerPort: 80

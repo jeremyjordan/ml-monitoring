@@ -11,7 +11,7 @@ from wine_quality_model.fiddler.fiddler import client
 
 
 FIDDLER_PROJECT = os.environ.get("FIDDLER_PROJECT", "jj_wine_quality")
-FIDDLER_MODEL_ID = os.environ.get("FIDDLER_MODEL_ID", "test_sklearn_model")
+FIDDLER_MODEL_ID = os.environ.get("FIDDLER_MODEL_ID", "sklearn_model")
 ROOT_DIR = Path(__file__).parent.parent
 
 app = FastAPI()

@@ -16,27 +16,32 @@ FIDDLER_AUTH_TOKEN = os.environ.get("FIDDLER_AUTH_TOKEN")
 client = fiddler.FiddlerApi(url=FIDDLER_URL, org_id=FIDDLER_ORG_ID, auth_token=FIDDLER_AUTH_TOKEN)
 
 
-def create_project(project_name):
+def create_project(project_id="jj_wine_quality"):
     existing_projects = client.list_projects()
-    if project_name not in existing_projects:
-        client.create_project(project_name)
+    if project_id not in existing_projects:
+        client.create_project(project_id)
 
 
-def upload_dataset(dataset_id="wine_quality"):
+def upload_dataset(project_id="jj_wine_quality", dataset_id="wine_quality"):
     dataset = prepare_dataset()
     df_schema = fiddler.DatasetInfo.from_dataframe(dataset["train"], max_inferred_cardinality=1000)
-    client.upload_dataset(dataset=dataset, dataset_id=dataset_id, info=df_schema)
+    client.upload_dataset(
+        project_id=project_id, dataset=dataset, dataset_id=dataset_id, info=df_schema
+    )
 
 
-def save_model_info(
+def upload_model(
+    project_id="jj_wine_quality",
     dataset_id="wine_quality",
+    model_id="sklearn_model",
     target="quality",
     metadata_cols=[],
     decision_cols=[],
     outputs=["predicted_quality"],
 ):
+    dataset_info = client.get_dataset_info(project_id, dataset_id)
     model_info = fiddler.ModelInfo.from_dataset_info(
-        dataset_info=client.get_dataset_info(dataset_id),
+        dataset_info=dataset_info,
         target=target,
         features=feature_names,
         metadata_cols=metadata_cols,
@@ -47,14 +52,5 @@ def save_model_info(
         display_name="Wine quality prediction model",
         description="",
     )
-    with open(ROOT_DIR / "model.yaml", "w") as yaml_file:
-        yaml.dump({"model": model_info.to_dict()}, yaml_file)
-
-
-def upload_model(project_name, model_id):
-    client.upload_model_package(
-        artifact_path=ROOT_DIR,
-        project_id=project_name,
-        model_id=model_id,
-        deployment_type="predictor",
-    )
+    client.register_model(project_id, model_id, dataset_id, model_info)
+    client.update_model(project_id, model_id, ROOT_DIR)

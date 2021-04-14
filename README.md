@@ -100,7 +100,7 @@ cat ~/.github/cr_token | docker login ghcr.io -u jeremyjordan --password-stdin
 ```
 3. Build and tag new Docker images.
 ```
-MODEL_TAG=0.3
+MODEL_TAG=0.3-fiddler
 docker build -t wine-quality-model:$MODEL_TAG -f Dockerfile .
 docker tag wine-quality-model:$MODEL_TAG ghcr.io/jeremyjordan/wine-quality-model:$MODEL_TAG
 ```

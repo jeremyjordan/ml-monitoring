@@ -1,5 +1,5 @@
 fastapi==0.63.0
-fiddler-client==0.6.16
+fiddler-client==0.7.0
 numpy==1.18.5
 pandas==0.23.3
 prometheus-fastapi-instrumentator==5.7.0
