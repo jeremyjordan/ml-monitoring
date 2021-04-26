@@ -21,6 +21,21 @@ feature_names = [
 ]
 
 
+feature_names = [
+    "fixed_acidity",
+    "volatile_acidity",
+    "citric_acid",
+    "residual_sugar",
+    "chlorides",
+    "free_sulfur_dioxide",
+    "total_sulfur_dioxide",
+    "density",
+    "ph",
+    "sulphates",
+    "alcohol_pct_vol",
+]
+
+
 class Wine(BaseModel):
     fixed_acidity: float = Field(
         ..., ge=0, description="grams per cubic decimeter of tartaric acid"

@@ -14,6 +14,8 @@ FIDDLER_PROJECT = os.environ.get("FIDDLER_PROJECT", "jj_wine_quality")
 FIDDLER_MODEL_ID = os.environ.get("FIDDLER_MODEL_ID", "sklearn_model")
 ROOT_DIR = Path(__file__).parent.parent
 
+ROOT_DIR = Path(__file__).parent.parent
+
 app = FastAPI()
 scaler = load(ROOT_DIR / "artifacts/scaler.joblib")
 model = load(ROOT_DIR / "artifacts/model.joblib")
