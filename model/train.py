@@ -17,17 +17,27 @@ from sklearn.model_selection import train_test_split
 logger = logging.getLogger(__name__)
 
 
-def train():
-    logger.info("Preparing dataset...")
+def prepare_dataset(test_size=0.2, random_seed=1):
     dataset = pd.read_csv(
         "https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-red.csv",
         delimiter=";",
     )
-    target = dataset["quality"]
-    features = dataset.drop("quality", axis=1)
-    X_train, X_test, y_train, y_test = train_test_split(
-        features, target, test_size=0.20, random_state=1
-    )
+    dataset = dataset.rename(columns=lambda x: x.lower().replace(" ", "_"))
+    train_df, test_df = train_test_split(dataset, test_size=test_size, random_state=random_seed)
+    return {"train": train_df, "test": test_df}
+
+
+def train():
+    logger.info("Preparing dataset...")
+    dataset = prepare_dataset()
+    train_df = dataset["train"]
+    test_df = dataset["test"]
+
+    # separate features from target
+    y_train = train_df["quality"]
+    X_train = train_df.drop("quality", axis=1)
+    y_test = test_df["quality"]
+    X_test = test_df.drop("quality", axis=1)
 
     logger.info("Training model...")
     scaler = preprocessing.StandardScaler().fit(X_train)

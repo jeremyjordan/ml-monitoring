@@ -1,26 +1,17 @@
+from pathlib import Path
+
 import numpy as np
 from fastapi import FastAPI, Response
 
 from joblib import load
-from .schemas import Wine, Rating
+from .schemas import Wine, Rating, feature_names
 from .monitoring import instrumentator
 
+ROOT_DIR = Path(__file__).parent.parent
+
 app = FastAPI()
-scaler = load("artifacts/scaler.joblib")
-model = load("artifacts/model.joblib")
-feature_names = [
-    "fixed_acidity",
-    "volatile_acidity",
-    "citric_acid",
-    "residual_sugar",
-    "chlorides",
-    "free_sulfur_dioxide",
-    "total_sulfur_dioxide",
-    "density",
-    "ph",
-    "sulphates",
-    "alcohol_pct_vol",
-]
+scaler = load(ROOT_DIR / "artifacts/scaler.joblib")
+model = load(ROOT_DIR / "artifacts/model.joblib")
 instrumentator.instrument(app).expose(app, include_in_schema=False, should_gzip=True)
 
 
@@ -31,8 +22,8 @@ async def root():
 
 @app.post("/predict", response_model=Rating)
 def predict(response: Response, sample: Wine):
-    sample = sample.dict()
-    features = np.array([sample[f] for f in feature_names]).reshape(1, -1)
+    sample_dict = sample.dict()
+    features = np.array([sample_dict[f] for f in feature_names]).reshape(1, -1)
     features_scaled = scaler.transform(features)
     prediction = model.predict(features_scaled)[0]
     response.headers["X-model-score"] = str(prediction)
