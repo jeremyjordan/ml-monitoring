@@ -25,6 +25,7 @@ minikube start --driver=docker --memory 4g --nodes 2
 2. Deploy Prometheus and Grafana onto the cluster using the [community Helm chart](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack).
 ```
 kubectl create namespace monitoring
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm install prometheus-stack prometheus-community/kube-prometheus-stack -n monitoring
 ```
 3. Verify the resources were deployed successfully.
