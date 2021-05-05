@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: fastapi-wine-quality-model
-          image: ghcr.io/jeremyjordan/wine-quality-model:0.3
+          image: ghcr.io/jeremyjordan/wine-quality-model:0.3-fiddler
           imagePullPolicy: Always
           env:
             - name: ENABLE_METRICS
@@ -27,6 +27,25 @@ spec:
               value: "fastapi"
             - name: METRICS_SUBSYSTEM
               value: ""
+            - name: FIDDLER_PROJECT
+              value: "jj_wine_quality"
+            - name: FIDDLER_MODEL_ID
+              value: "sklearn_model"
+            - name: FIDDLER_URL
+              valueFrom:
+                secretKeyRef:
+                  name: fiddler-secrets
+                  key: FIDDLER_URL
+            - name: FIDDLER_ORG_ID
+              valueFrom:
+                secretKeyRef:
+                  name: fiddler-secrets
+                  key: FIDDLER_ORG_ID
+            - name: FIDDLER_AUTH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: fiddler-secrets
+                  key: FIDDLER_AUTH_TOKEN
           ports:
             - name: app
               containerPort: 80
