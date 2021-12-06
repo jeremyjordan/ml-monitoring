@@ -49,4 +49,4 @@ def predict(response: Response, sample: Wine, background_tasks: BackgroundTasks)
 
 @app.get("/healthcheck")
 async def healthcheck():
-    return {"staus": "ok"}
+    return {"status": "ok"}
